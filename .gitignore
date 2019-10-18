@@ -65,8 +65,15 @@ db.sqlite3
 instance/
 .webassets-cache
 
+# Generic ignore patterns
+*.ignore
+ignore-*.ipynb
+
 # Scrapy stuff:
 .scrapy
+
+#PyCharm
+.idea/
 
 # Sphinx documentation
 docs/_build/
