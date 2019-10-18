@@ -4,9 +4,6 @@ from bs4 import BeautifulSoup as bs
 import numpy as np
 import pandas as pd
 
-import time
-from datetime import time
-
 import logging
 logging.basicConfig(format='%(message)s', level=logging.INFO)  # setting level to debug; will log all types of logging
 LOG = logging.getLogger(__name__)
@@ -48,16 +45,14 @@ class ScrapeScreener:
         return company_stats_df
 
     @staticmethod
-    def clean_values(x):
-        return x.replace('cr.', '').replace(',', '').replace('%', '')
+    def clean_data(df, cols_to_process):
+        for col in cols_to_process:
+            df[col] = df[col].apply(lambda x: x.replace('cr.', '').replace(',', '').replace('%', ''))
 
-    @staticmethod
-    def catch_missing_values(df):
+        # catch missing values
         df = df.replace('cr.', np.NaN).replace('%', np.NaN).replace('', np.NaN)
-        return df
 
-    @staticmethod
-    def change_to_float_type(df, cols_to_process):
+        # change column data-type to float
         cols_type = {}
         for col in cols_to_process:
             cols_type[col] = 'float32'
