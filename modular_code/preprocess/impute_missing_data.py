@@ -14,9 +14,6 @@ LOG = logging.getLogger(__name__)
 
 
 class ImputeMissingData(luigi.Task):
-    cols_to_clean_default = ['market_cap', 'current_price', 'book_value', 'stock_pe', 'dividend_yield',
-                             'roce', 'roe', 'sales_growth_3yrs', 'face_value']
-
     cols_to_clean = luigi.ListParameter()
     output_dir = luigi.Parameter(default='../output_files/')
 

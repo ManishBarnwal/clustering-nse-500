@@ -1,3 +1,5 @@
+Cluster to find similar companies
+
 Idea: 
 Each company can be represented  by few metrics(ideally) that would define the health of the company. Metrics like eps, revenue, market-cap, last 4 quarter earnings, RoE, PE ratio, etc. There could be other metrics or features as well. If we represent each company with these metrics and apply clustering on this data, would the clusters generated be meaningful.
 We know we have companies like Bajaj Finance which has given excellent returns in the past and is continuing to do so. There would be other companies like this. Would it be possible that companies like Bajaj Finance will be clubbed into one cluster. 

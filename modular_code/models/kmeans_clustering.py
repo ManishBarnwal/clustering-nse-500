@@ -9,13 +9,13 @@ class KMeansClustering:
         self.verbose = verbose
         self.random_state = random_state
 
-        self._kmeans_model = KMeans(n_clusters=self.n_clusters,
-                                    init='k-means++',
-                                    n_jobs=self.n_jobs, verbose=self.verbose,
-                                    random_state=self.random_state)
+        self.kmeans = KMeans(n_clusters=self.n_clusters,
+                             init='k-means++',
+                             n_jobs=self.n_jobs, verbose=self.verbose,
+                             random_state=self.random_state)
 
     def fit(self, input_data):
-        self._kmeans_model.fit(input_data)
+        self.kmeans.fit(input_data)
 
     def predict(self, input_data):
-        return self._kmeans_model.predict(input_data)
+        return self.kmeans.predict(input_data)
