@@ -17,13 +17,21 @@ class ScrapeCompaniesInfo(luigi.Task):
     cols_to_clean = luigi.ListParameter()
     output_dir = luigi.Parameter(default='../output_files/')
 
+    @property
+    def output_path(self):
+        return os.path.join(
+            self.output_dir,
+            'companies_info_',
+            '{}'.format(date.today()),
+            '.csv'
+
+        )
+
     def requires(self):
         return []
 
     def output(self):
-        output_file_name = 'companies_info_' + str(date.today()) + '.csv'
-        output_path = os.path.join(self.output_dir, output_file_name)
-        return luigi.LocalTarget(output_path)
+        return luigi.LocalTarget(self.output_path)
 
     def run(self):
         LOG.info('--- Reading NSE500 companies names ---')

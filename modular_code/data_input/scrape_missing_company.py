@@ -18,15 +18,23 @@ class ScrapeMissingCompanies(luigi.Task):
     cols_to_clean = luigi.ListParameter()
     output_dir = luigi.Parameter(default='../output_files/')
 
+    @property
+    def output_path(self):
+        return os.path.join(
+            self.output_dir,
+            'all_companies_info_',
+            '{}'.format(date.today()),
+            '.csv'
+
+        )
+
     def requires(self):
         return ScrapeCompaniesInfo(cols_to_clean=self.cols_to_clean,
                                    output_dir=self.output_dir
-                                  )
+                                   )
 
     def output(self):
-        output_file_name = 'all_companies_info_' + str(date.today()) + '.csv'
-        output_path = os.path.join(self.output_dir, output_file_name)
-        return luigi.LocalTarget(output_path)
+        return luigi.LocalTarget(self.output_path)
 
     def run(self):
         with self.input().open('r') as infile:

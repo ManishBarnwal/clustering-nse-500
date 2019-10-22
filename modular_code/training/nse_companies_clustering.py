@@ -28,14 +28,21 @@ class NSECompaniesSegmentation(luigi.Task):
     output_dir = luigi.Parameter(default='../output_files/')
     n_clusters = luigi.IntParameter(default=3)
 
+    @property
+    def output_path(self):
+        return os.path.join(
+            self.output_dir,
+            'companies_segmentation_',
+            '{}'.format(str(date.today())),
+            '.csv'
+        )
+
     def requires(self):
         return ImputeMissingData(cols_to_clean=self.cols_to_clean,
                                  output_dir=self.output_dir)
 
     def output(self):
-        output_file_name = 'companies_segmentation_' + str(date.today()) + '.csv'
-        output_path = os.path.join(self.output_dir, output_file_name)
-        return luigi.LocalTarget(output_path)
+        return luigi.LocalTarget(self.output_path)
 
     def run(self):
         with self.input().open('r') as infile:
