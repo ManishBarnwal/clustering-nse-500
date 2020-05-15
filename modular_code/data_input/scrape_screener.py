@@ -19,21 +19,25 @@ class ScrapeScreener:
                 url = f'https://www.screener.in/company/{company}'
             elif type_data == 'consolidated':
                 url = f'https://www.screener.in/company/{company}/{type_data}'
-            response = rq.get(url)
-            soup = bs(response.text, "html.parser")  # parse the html page
-            basic_features_soup = soup.find_all(class_='row-full-width')
-            basic_features_list = basic_features_soup[0].find_all(class_='four columns')
-            basic_stats = [f.get_text() for f in basic_features_list]
+            try:
 
-            basic_stats = [f.lower().strip().replace('\n', '').replace('  ', '').replace(' ', '_') for f in basic_stats]
+                response = rq.get(url)
+                soup = bs(response.text, "html.parser")  # parse the html page
+                basic_features_soup = soup.find_all(class_='row-full-width')
+                basic_features_list = basic_features_soup[0].find_all(class_='four columns')
+                basic_stats = [f.get_text() for f in basic_features_list]
 
-            company_stats_dict = {}
-            company_stats_dict['symbol'] = company
-            for f in basic_stats:
-                s = f.split(":")
-                if len(s) == 2:
-                    company_stats_dict[s[0]] = s[1]
-            final_basic_stats_list.append(list(company_stats_dict.values()))
+                basic_stats = [f.lower().strip().replace('\n', '').replace('  ', '').replace(' ', '_') for f in basic_stats]
+                company_stats_dict = dict()
+                company_stats_dict['symbol'] = company
+                for f in basic_stats:
+                    s = f.split(":")
+                    if len(s) == 2:
+                        company_stats_dict[s[0]] = s[1]
+                final_basic_stats_list.append(list(company_stats_dict.values()))
+            except IndexError:
+                LOG.exception(f'Error in scraping {company} company data. Continue to scrape.')
+                pass
 
         company_stats_df = pd.DataFrame(final_basic_stats_list,
                                         columns=company_stats_dict.keys())
