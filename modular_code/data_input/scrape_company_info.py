@@ -16,15 +16,14 @@ LOG = logging.getLogger(__name__)
 class ScrapeCompaniesInfo(luigi.Task):
     cols_to_clean = luigi.ListParameter()
     output_dir = luigi.Parameter(default='../output_files/')
+    output_filename = luigi.Parameter(default='companies_info.csv')
 
     @property
     def output_path(self):
         return os.path.join(
             self.output_dir,
-            'companies_info_',
             '{}'.format(date.today()),
-            '.csv'
-
+            '{}'.format(self.output_filename)
         )
 
     def requires(self):
@@ -34,7 +33,7 @@ class ScrapeCompaniesInfo(luigi.Task):
         return luigi.LocalTarget(self.output_path)
 
     def run(self):
-        LOG.info('--- Reading NSE500 companies names ---')
+        LOG.info('--- Reading NSE500 company names ---')
         nse_500 = pd.read_csv('../input_files/ind_nifty500list.csv')
         num_companies = nse_500.Symbol.nunique()
         companies = nse_500['Symbol'].values[:num_companies]
