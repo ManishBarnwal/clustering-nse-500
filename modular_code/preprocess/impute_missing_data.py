@@ -16,15 +16,14 @@ LOG = logging.getLogger(__name__)
 class ImputeMissingData(luigi.Task):
     cols_to_clean = luigi.ListParameter()
     output_dir = luigi.Parameter(default='../output_files/')
+    output_filename = luigi.Parameter(default='companies_info_imputed.csv')
 
     @property
     def output_path(self):
         return os.path.join(
             self.output_dir,
-            'companies_info_imputed_',
             '{}'.format(date.today()),
-            '.csv'
-
+            '{}'.format(self.output_filename)
         )
 
     def requires(self):
@@ -38,11 +37,11 @@ class ImputeMissingData(luigi.Task):
     def run(self):
         with self.input().open('r') as infile:
             companies_info = pd.read_csv(infile)
-            LOG.info('--- Loaded successfully. No. of companies in data ---: {}'.format(companies_info.shape))
+            LOG.info(f'--- Successfully loaded. No. of companies in data: {companies_info.shape[0]} ---')
 
         companies_info_imputed = self.impute_missing_values(companies_info)
 
-        LOG.info('--- No. of companies after dropping missing values ---: {}'.format(companies_info_imputed.shape))
+        LOG.info(f'--- No. of companies after dropping missing values: {companies_info_imputed.shape[0]} ---')
         with self.output().open('w') as outfile:
             companies_info_imputed.to_csv(outfile, index=False)
 

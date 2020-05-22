@@ -36,7 +36,7 @@ class ScrapeScreener:
                         company_stats_dict[s[0]] = s[1]
                 final_basic_stats_list.append(list(company_stats_dict.values()))
             except IndexError:
-                LOG.exception(f'Error in scraping {company} company data. Continue to scrape.')
+                LOG.exception(f'--- Error in scraping {company} company data. Continue to scrape. ---')
                 pass
 
         company_stats_df = pd.DataFrame(final_basic_stats_list,
@@ -67,3 +67,36 @@ class ScrapeScreener:
             df[col] = df[col].apply(lambda x: np.round(x, 2))
 
         return df
+
+    @staticmethod
+    def scrape_about_company_info(companies_list, type_data='stand_alone'):
+        final_about_company_list = []
+        for company in companies_list:
+            if type_data == 'stand_alone':
+                url = f'https://www.screener.in/company/{company}'
+            elif type_data == 'consolidated':
+                url = f'https://www.screener.in/company/{company}/{type_data}'
+            try:
+
+                response = rq.get(url)
+
+                soup = bs(response.text, "lxml")  # parse the page
+
+                about_company_html = soup.find_all(id='company-profile')
+                about_company_text = str(about_company_html[0])
+                about_company_text = about_company_text.split(sep='">')[1]
+                about_company_final = about_company_text.split('(Source')[0]
+
+                about_company_dict = dict()
+                about_company_dict['symbol'] = company
+                about_company_dict['about_company'] = about_company_final
+
+                final_about_company_list.append(list(about_company_dict.values()))
+            except IndexError:
+                LOG.exception(f'Error in scraping {company} company data. Continue to scrape.')
+                pass
+
+        about_company_df = pd.DataFrame(final_about_company_list,
+                                        columns=about_company_dict.keys())
+
+        return about_company_df

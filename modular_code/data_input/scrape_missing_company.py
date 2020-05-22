@@ -17,15 +17,14 @@ LOG = logging.getLogger(__name__)
 class ScrapeMissingCompanies(luigi.Task):
     cols_to_clean = luigi.ListParameter()
     output_dir = luigi.Parameter(default='../output_files/')
+    output_filename = luigi.Parameter(default='all_companies_info.csv')
 
     @property
     def output_path(self):
         return os.path.join(
             self.output_dir,
-            'all_companies_info_',
             '{}'.format(date.today()),
-            '.csv'
-
+            '{}'.format(self.output_filename)
         )
 
     def requires(self):
@@ -49,7 +48,7 @@ class ScrapeMissingCompanies(luigi.Task):
         # we'll try to impute stock_pe for the companies with missing stock_pe by scraping their consolidated data
         missing_stock_pe_bool = companies_info['stock_pe'].isna()
         consolidated_company_names = companies_info.loc[missing_stock_pe_bool, 'symbol'].values
-        LOG.info('--- Consolidated_company_names-- {}'.format(consolidated_company_names))
+        LOG.info(f'--- Consolidated_company_names: {consolidated_company_names} ---')
 
         # drop these companies as we will get their consolidated data
         missing_stock_pe_row_ind = missing_stock_pe_bool.index[missing_stock_pe_bool]
@@ -67,7 +66,7 @@ class ScrapeMissingCompanies(luigi.Task):
         all_companies_info = self.impute_bad_pe(all_companies_info, second_col='roe',
                                                 fill_value=-1)  # impute actually-bad-performing stock_pe with -1
         LOG.info('--- Successfully scraped all companies information ---')
-        LOG.info('---No. of companies in total: {} ---'.format(all_companies_info.shape))
+        LOG.info(f'---No. of companies in total: {all_companies_info.shape[0]} ---')
 
         with self.output().open('w') as outfile:
             all_companies_info.to_csv(outfile,  index=False)
