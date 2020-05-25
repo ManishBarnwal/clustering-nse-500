@@ -3,7 +3,7 @@ from sklearn.cluster import KMeans
 
 class KMeansClustering:
     def __init__(self, n_clusters,
-                 n_jobs=-2, verbose=1, random_state=2019):
+                 n_jobs=-2, verbose=0, random_state=2019):
         self.n_clusters = n_clusters
         self.n_jobs = n_jobs
         self.verbose = verbose
