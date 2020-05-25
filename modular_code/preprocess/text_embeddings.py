@@ -1,5 +1,3 @@
-from collections import Counter
-
 import numpy as np
 import pandas as pd
 
@@ -7,20 +5,13 @@ import spacy
 import luigi
 
 import os
-import sys
 import logging
 from datetime import date
-
-
-# TODO: figure out a better way to do this
-# adding this to path so that local importing of modules work
-sys.path.append('/Users/manishb-imac/personal-projects/clustering-nse-500/modular_code')
+from collections import Counter
 
 from data_input.scrape_about_company import ScrapeAboutCompanyText
 
-logging.basicConfig(format='%(message)s', level=logging.INFO)  # setting level to debug; will log all types of logging
-LOG = logging.getLogger(__name__)
-
+logging.basicConfig(format='%(message)s', level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 

@@ -10,7 +10,7 @@ from data_input.scrape_company_info import ScrapeCompaniesInfo
 from data_input.scrape_screener import ScrapeScreener
 
 
-logging.basicConfig(format='%(message)s', level=logging.INFO)  # setting level to debug; will log all types of logging
+logging.basicConfig(format='%(message)s', level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 

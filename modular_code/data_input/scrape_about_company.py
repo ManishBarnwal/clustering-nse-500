@@ -3,19 +3,14 @@ import luigi
 import pandas as pd
 
 import os
-import sys
 import logging
 from datetime import date
-
-# TODO: figure out a better way to do this
-# adding this to path so that local importing of modules work
-sys.path.append('/Users/manishb-imac/personal-projects/clustering-nse-500/modular_code')
 
 from preprocess.impute_missing_data import ImputeMissingData
 from data_input.scrape_screener import ScrapeScreener
 
 
-logging.basicConfig(format='%(message)s', level=logging.INFO)  # setting level to debug; will log all types of logging
+logging.basicConfig(format='%(message)s', level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 

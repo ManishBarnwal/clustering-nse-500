@@ -6,16 +6,17 @@ import sys
 import logging
 from datetime import date
 
-# TODO: figure out a better way to do this
+from sklearn.preprocessing import MinMaxScaler
+
+# TODO: figure out a better way to do this - somehow this is not working w/o explicitly adding the path
 # adding this to path so that local importing of modules work
 sys.path.append('/Users/manishb-imac/personal-projects/clustering-nse-500/modular_code')
 
 from preprocess.merge_company_stats_embeddings import MergeCompanyStatsEmbeddings
-from sklearn.preprocessing import MinMaxScaler
 from models.kmeans_clustering import KMeansClustering
 
 
-logging.basicConfig(format='%(message)s', level=logging.INFO)  # setting level to debug; will log all types of logging
+logging.basicConfig(format='%(message)s', level=logging.INFO)
 LOG = logging.getLogger(__name__)
 
 
